@@ -1,1 +1,55 @@
 
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Noor Live - Islamic Live Streaming</title>
+<style>
+body{margin:0;font-family:sans-serif;background:#0f0f0f;color:white;text-align:center}
+.header{background:#00c853;padding:15px;font-size:22px;font-weight:bold}
+.btn{background:#00c853;color:white;padding:15px 25px;margin:10px;border:none;border-radius:10px;font-size:18px}
+.container{padding:20px}
+#root{width:100%;height:80vh}
+</style>
+<script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
+</head>
+<body>
+<div class="header">Noor Live - نور لائیو</div>
+<div class="container">
+<h2>Islamic Live Streaming Platform</h2>
+<button class="btn" onclick="startLive(true)">Go Live (Host)</button>
+<button class="btn" onclick="startLive(false)">Watch Live (Audience)</button>
+<div id="root"></div>
+<p>Features: Co-host | PK Battle | 1v1 Call | Gifts</p>
+<p>Production Email: mazharbaloch2135@gmail.com</p>
+</div>
+<script>
+function getUrlParams(url){
+let urlStr=url.split('?')[1];
+return new URLSearchParams(urlStr);
+}
+function randomID(len){
+let result='';let chars='12345qwertyuiopasdfgh67890jklmnbvcxzMNBVCZXASDQWERTYHGFUIOPLKJH';
+for(let i=0;i<len;i++){result+=chars.charAt(Math.floor(Math.random()*chars.length));}
+return result;
+}
+function startLive(isHost){
+const roomID=getUrlParams(window.location.href).get('roomID')||randomID(5);
+const userID=randomID(5);
+const userName="User_"+userID;
+// TODO: Replace with your ZEGOCLOUD AppID - Get from Nadeem ZEGO
+const appID=0;
+const serverSecret="";
+const kitToken=ZegoUIKitPrebuilt.generateKitTokenForTest(appID,serverSecret,roomID,userID,userName);
+const zp=ZegoUIKitPrebuilt.create(kitToken);
+zp.joinRoom({
+container:document.querySelector("#root"),
+scenario:{
+mode:isHost?ZegoUIKitPrebuilt.LiveStreaming:ZegoUIKitPrebuilt.LiveStreaming,
+config:{role:isHost?ZegoUIKitPrebuilt.Host:ZegoUIKitPrebuilt.Audience}
+}
+});
+}
+</script>
+</body>
+</html>
